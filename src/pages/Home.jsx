@@ -16,6 +16,7 @@ import {
   Calendar,
   Github,
   Linkedin,
+  Coffee,
 } from "lucide-react";
 
 function Home() {
@@ -338,13 +339,24 @@ function Home() {
           <p className="text-xl text-gray-600 dark:text-gray-400 mb-12 max-w-3xl mx-auto">
             {t("home_cta_subtitle")}
           </p>
-          <Link
-            to="/entries"
-            className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-10 rounded-lg transition shadow-lg hover:shadow-xl text-lg"
-          >
-            {t("start_tracking")}
-            <ArrowRight className="w-5 h-5" />
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+            <Link
+              to="/entries"
+              className="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 px-10 rounded-lg transition shadow-lg hover:shadow-xl text-lg"
+            >
+              {t("start_tracking")}
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+            <a
+              href="https://ko-fi.com/vicking20"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold py-4 px-10 rounded-lg transition shadow-lg hover:shadow-xl text-lg"
+            >
+              <Coffee className="w-5 h-5" />
+              {t("support_btn_home")}
+            </a>
+          </div>
           <p className="text-gray-600 mt-8 text-sm">{t("home_cta_note")}</p>
         </div>
       </div>
