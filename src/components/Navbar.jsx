@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Heart, Globe, User, Menu, X } from "lucide-react";
+import { Heart, User, Menu, X } from "lucide-react";
 
 function Navbar() {
   const { t, i18n } = useTranslation();
@@ -64,14 +64,14 @@ function Navbar() {
             </Link>
           </div>
 
-          {/* Language Switcher - Globe icon button with dropdown */}
+          {/* Language Switcher - Chinese character button with dropdown */}
           <div className="relative" ref={languageRef}>
             <button
               onClick={() => setIsLanguageOpen(!isLanguageOpen)}
-              className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+              className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-xl font-semibold"
               title="Change language"
             >
-              <Globe className="w-6 h-6" />
+              文
             </button>
 
             {/* Language Dropdown Menu */}
