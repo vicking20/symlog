@@ -31,7 +31,7 @@ function ReportBuilder({ entries, shouldShowBuilder = false, onClose = null }) {
   }
 
   const [reportConfig, setReportConfig] = useState({
-    title: "My Health Report",
+    title: t("my_health_report"),
     include: {
       personal_info: true,
       medical_info: true,
@@ -99,6 +99,7 @@ function ReportBuilder({ entries, shouldShowBuilder = false, onClose = null }) {
       reportConfig,
       filteredEntries,
       profile,
+      t,
     );
 
     const printWindow = window.open("", "", "width=800,height=600");
@@ -122,6 +123,7 @@ function ReportBuilder({ entries, shouldShowBuilder = false, onClose = null }) {
       reportConfig,
       filteredEntries,
       profile,
+      t,
     );
     const subject = encodeURIComponent(reportConfig.title);
     const body = encodeURIComponent(reportHTML);
@@ -134,6 +136,7 @@ function ReportBuilder({ entries, shouldShowBuilder = false, onClose = null }) {
       reportConfig,
       filteredEntries,
       profile,
+      t,
     );
     try {
       await navigator.clipboard.writeText(reportText);
@@ -409,9 +412,12 @@ function ReportBuilder({ entries, shouldShowBuilder = false, onClose = null }) {
                 {t("report_builder_preview_section_title")}
               </p>
               <p className="text-sm text-blue-800 dark:text-gray-400">
-                {filteredEntries.length} entries will be included
-                {reportConfig.include.personal_info && " - personal data"}
-                {reportConfig.include.medical_info && " - medical info"}
+                {t("report_builder_entries_included", {
+                  count: filteredEntries.length,
+                })}
+                {reportConfig.include.personal_info &&
+                  ` - ${t("personal_data")}`}
+                {reportConfig.include.medical_info && ` - ${t("medical_info")}`}
               </p>
             </div>
           </div>
@@ -457,37 +463,67 @@ function ReportBuilder({ entries, shouldShowBuilder = false, onClose = null }) {
   );
 }
 
-function generateReportHTML(reportConfig, entries, profile) {
+function generateReportHTML(reportConfig, entries, profile, t) {
   let html = `
     <div style="font-family: Arial, sans-serif; color: #333;">
-      <h1 style="color: #0066cc; border-bottom: 2px solid #0066cc; padding-bottom: 10px;">${reportConfig.title}</h1>
-      <p style="font-size: 0.8em; color: #666;">Generated: ${new Date().toLocaleDateString()}</p>
+      <h1 style="color: #0066cc; border-bottom: 2px solid #0066cc; padding-bottom: 10px;">${
+        reportConfig.title
+      }</h1>
+      <p style="font-size: 0.8em; color: #666;">${t(
+        "report_generated",
+      )}: ${new Date().toLocaleDateString()}</p>
   `;
 
   if (reportConfig.include.personal_info && profile?.personal_info) {
     html += `
       <div style="margin-bottom: 20px;">
-        <h2 style="color: #0066cc; margin-top: 20px;">PERSONAL INFORMATION</h2>
+        <h2 style="color: #0066cc; margin-top: 20px;">${t(
+          "personal_information",
+        )}</h2>
         <table style="width: 100%; border-collapse: collapse;">
           <tr>
-            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;"><strong>Name:</strong></td>
-            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;">${profile.personal_info.name || "Not set"}</td>
+            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;"><strong>${t(
+              "name",
+            )}:</strong></td>
+            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;">${
+              profile.personal_info.name || t("not_set")
+            }</td>
           </tr>
           <tr>
-            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;"><strong>Age:</strong></td>
-            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;">${profile.personal_info.age || "Not set"}</td>
+            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;"><strong>${t(
+              "age",
+            )}:</strong></td>
+            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;">${
+              profile.personal_info.age || t("not_set")
+            }</td>
           </tr>
           <tr>
-            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;"><strong>Weight:</strong></td>
-            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;">${profile.personal_info.weight.value ? `${profile.personal_info.weight.value} ${profile.personal_info.weight.unit}` : "Not set"}</td>
+            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;"><strong>${t(
+              "weight",
+            )}:</strong></td>
+            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;">${
+              profile.personal_info.weight.value
+                ? `${profile.personal_info.weight.value} ${profile.personal_info.weight.unit}`
+                : t("not_set")
+            }</td>
           </tr>
           <tr>
-            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;"><strong>Height:</strong></td>
-            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;">${profile.personal_info.height.value ? `${profile.personal_info.height.value} ${profile.personal_info.height.unit}` : "Not set"}</td>
+            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;"><strong>${t(
+              "height",
+            )}:</strong></td>
+            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;">${
+              profile.personal_info.height.value
+                ? `${profile.personal_info.height.value} ${profile.personal_info.height.unit}`
+                : t("not_set")
+            }</td>
           </tr>
           <tr>
-            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;"><strong>Blood Type:</strong></td>
-            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;">${profile.personal_info.blood_type || "Not set"}</td>
+            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;"><strong>${t(
+              "blood_type",
+            )}:</strong></td>
+            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;">${
+              profile.personal_info.blood_type || t("not_set")
+            }</td>
           </tr>
         </table>
       </div>
@@ -497,23 +533,41 @@ function generateReportHTML(reportConfig, entries, profile) {
   if (reportConfig.include.medical_info && profile?.medical_info) {
     html += `
       <div style="margin-bottom: 20px;">
-        <h2 style="color: #0066cc; margin-top: 20px;">MEDICAL INFORMATION</h2>
+        <h2 style="color: #0066cc; margin-top: 20px;">${t(
+          "medical_information",
+        )}</h2>
         <table style="width: 100%; border-collapse: collapse;">
           <tr>
-            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;"><strong>Conditions:</strong></td>
-            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;">${profile.medical_info.conditions.join(", ") || "None"}</td>
+            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;"><strong>${t(
+              "conditions",
+            )}:</strong></td>
+            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;">${
+              profile.medical_info.conditions.join(", ") || t("none")
+            }</td>
           </tr>
           <tr>
-            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;"><strong>Allergies:</strong></td>
-            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;">${profile.medical_info.allergies.join(", ") || "None"}</td>
+            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;"><strong>${t(
+              "allergies",
+            )}:</strong></td>
+            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;">${
+              profile.medical_info.allergies.join(", ") || t("none")
+            }</td>
           </tr>
           <tr>
-            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;"><strong>Doctor:</strong></td>
-            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;">${profile.medical_info.doctor_name || "Not set"}</td>
+            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;"><strong>${t(
+              "doctor",
+            )}:</strong></td>
+            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;">${
+              profile.medical_info.doctor_name || t("not_set")
+            }</td>
           </tr>
           <tr>
-            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;"><strong>Diagnosis:</strong></td>
-            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;">${profile.medical_info.diagnosis || "Not set"}</td>
+            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;"><strong>${t(
+              "diagnosis",
+            )}:</strong></td>
+            <td style="padding: 5px; border: 1px solid #ddd; vertical-align: top;">${
+              profile.medical_info.diagnosis || t("not_set")
+            }</td>
           </tr>
         </table>
       </div>
@@ -523,7 +577,7 @@ function generateReportHTML(reportConfig, entries, profile) {
   if (entries.length > 0) {
     html += `
       <div>
-        <h2 style="color: #0066cc; margin-top: 20px;">HEALTH LOG</h2>
+        <h2 style="color: #0066cc; margin-top: 20px;">${t("health_log")}</h2>
     `;
 
     const groupedByDate = entries.reduce((acc, entry) => {
@@ -541,7 +595,14 @@ function generateReportHTML(reportConfig, entries, profile) {
     sortedDates.forEach((date) => {
       html += `
         <div style="margin-top: 15px;">
-          <h3 style="background-color: #f0f0f0; padding: 8px; border-radius: 5px;">${new Date(date).toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</h3>
+          <h3 style="background-color: #f0f0f0; padding: 8px; border-radius: 5px;">${new Date(
+            date,
+          ).toLocaleDateString("en-US", {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}</h3>
           <ul style="list-style-type: none; padding-left: 10px;">
       `;
 
@@ -556,13 +617,18 @@ function generateReportHTML(reportConfig, entries, profile) {
             html += `<ul style="list-style-type: circle; padding-left: 20px; font-size: 0.9em;">`;
             Object.entries(entry.values).forEach(([key, value]) => {
               if (key !== "uas_score") {
-                html += `<li><strong>${key.replace(/_/g, " ")}:</strong> ${value}</li>`;
+                html += `<li><strong>${key.replace(
+                  /_/g,
+                  " ",
+                )}:</strong> ${value}</li>`;
               }
             });
             html += `</ul>`;
 
             if (entry.values.uas_score !== undefined) {
-              html += `<div style="background-color: #e8f5e9; padding: 5px; margin-top: 5px; text-align: center; border-radius: 4px;"><strong>Total Daily UAS: ${entry.values.uas_score}</strong></div>`;
+              html += `<div style="background-color: #e8f5e9; padding: 5px; margin-top: 5px; text-align: center; border-radius: 4px;"><strong>${t(
+                "total_daily_uas_report",
+              )}: ${entry.values.uas_score}</strong></div>`;
             }
           }
 
@@ -583,35 +649,59 @@ function generateReportHTML(reportConfig, entries, profile) {
   return html;
 }
 
-function generateReportText(reportConfig, entries, profile) {
+function generateReportText(reportConfig, entries, profile, t) {
   let text = `${reportConfig.title}\n`;
-  text += `Generated: ${new Date().toLocaleDateString()}\n`;
+  text += `${t("report_generated")}: ${new Date().toLocaleDateString()}\n`;
   text += "=".repeat(50) + "\n\n";
 
   if (reportConfig.include.personal_info && profile?.personal_info) {
-    text += "PERSONAL INFORMATION\n";
+    text += `${t("personal_information")}\n`;
     text += "-".repeat(50) + "\n";
-    text += `Name: ${profile.personal_info.name || "Not set"}\n`;
-    text += `Age: ${profile.personal_info.age || "Not set"}\n`;
-    text += `Weight: ${profile.personal_info.weight.value ? profile.personal_info.weight.value + " " + profile.personal_info.weight.unit : "Not set"}\n`;
-    text += `Height: ${profile.personal_info.height.value ? profile.personal_info.height.value + " " + profile.personal_info.height.unit : "Not set"}\n`;
-    text += `Blood Type: ${profile.personal_info.blood_type || "Not set"}\n\n`;
+    text += `${t("name")}: ${profile.personal_info.name || t("not_set")}\n`;
+    text += `${t("age")}: ${profile.personal_info.age || t("not_set")}\n`;
+    text += `${t("weight")}: ${
+      profile.personal_info.weight.value
+        ? profile.personal_info.weight.value +
+          " " +
+          profile.personal_info.weight.unit
+        : t("not_set")
+    }\n`;
+    text += `${t("height")}: ${
+      profile.personal_info.height.value
+        ? profile.personal_info.height.value +
+          " " +
+          profile.personal_info.height.unit
+        : t("not_set")
+    }\n`;
+    text += `${t("blood_type")}: ${
+      profile.personal_info.blood_type || t("not_set")
+    }\n\n`;
   }
 
   if (reportConfig.include.medical_info && profile?.medical_info) {
-    text += "MEDICAL INFORMATION\n";
+    text += `${t("medical_information")}\n`;
     text += "-".repeat(50) + "\n";
-    text += `Conditions: ${profile.medical_info.conditions.join(", ") || "None"}\n`;
-    text += `Allergies: ${profile.medical_info.allergies.join(", ") || "None"}\n`;
-    text += `Doctor: ${profile.medical_info.doctor_name || "Not set"}\n`;
-    text += `Diagnosis: ${profile.medical_info.diagnosis || "Not set"}\n\n`;
+    text += `${t("conditions")}: ${
+      profile.medical_info.conditions.join(", ") || t("none")
+    }\n`;
+    text += `${t("allergies")}: ${
+      profile.medical_info.allergies.join(", ") || t("none")
+    }\n`;
+    text += `${t("doctor")}: ${
+      profile.medical_info.doctor_name || t("not_set")
+    }\n`;
+    text += `${t("diagnosis")}: ${
+      profile.medical_info.diagnosis || t("not_set")
+    }\n\n`;
   }
 
   if (entries.length > 0) {
-    text += "HEALTH LOG\n";
+    text += `${t("health_log")}\n`;
     text += "-".repeat(50) + "\n";
     entries.forEach((entry, idx) => {
-      text += `${idx + 1}. ${entry.subtype_label || entry.entry_type} - ${entry.date}\n`;
+      text += `${idx + 1}. ${
+        entry.subtype_label || entry.entry_type
+      } - ${entry.date}\n`;
       if (Object.keys(entry.values || {}).length > 0) {
         Object.entries(entry.values).forEach(([key, value]) => {
           text += `   ${key}: ${value}\n`;
