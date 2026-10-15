@@ -1,5 +1,5 @@
 # Symlog
-Visit [Symlog](https://symlog.zekfat.xyz)
+Visit [Symlog](https://symlog.vercel.app/)
 
 A privacy-friendly, open-source **symptom and health diary** that helps patients track daily symptoms using validated clinical scales like **UAS7**, **PHQ-9**, **GAD-7**, and more.
 
